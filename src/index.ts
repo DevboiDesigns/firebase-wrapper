@@ -6,7 +6,7 @@
 //   getDownloadURL,
 //   FieldValue,
 // } from "./config/firebase"
-import FBService from "./config/firebase"
+import { FBService } from "./services/fb.service"
 import GCSBucketName from "./models/GCSBucketName"
 import GSCService from "./config/google"
 import { FBKeys, FBSubKeys, ERRKeys } from "./config/fb.collection.keys"

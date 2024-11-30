@@ -3,37 +3,18 @@ import { initializeApp, cert, ServiceAccount } from "firebase-admin/app"
 import { getFirestore, FieldValue } from "firebase-admin/firestore"
 import { getDatabase } from "firebase-admin/database"
 import { getStorage, getDownloadURL } from "firebase-admin/storage"
+
 import GCSBucketName from "../models/GCSBucketName"
-import { FB_DB_URL, NODE_ENV } from "./env.keys"
-import FIREBASE_SERVICE_ACCOUNT from "./fb.auth"
+import { FB_DB_URL, NODE_ENV } from "../config/env.keys"
+import FIREBASE_SERVICE_ACCOUNT from "../config/fb.auth"
 
 const bucketName =
   NODE_ENV === "dev"
     ? GCSBucketName.SL_PUBLIC_BUCKET
     : GCSBucketName.SL_PROD_PUBLIC_BUCKET
 
-// INIT
-// initializeApp({
-//   credential: cert(FIREBASE_SERVICE_ACCOUNT as ServiceAccount),
-//   databaseURL: FB_DB_URL,
-//   storageBucket: `${bucketName}.appspot.com`,
-// })
-
-// INIT App
-// const app = initializeApp({
-//   credential: cert(FIREBASE_SERVICE_ACCOUNT as ServiceAccount),
-//   databaseURL: FB_DB_URL,
-//   storageBucket: `${bucketName}.appspot.com`,
-// })
-
-// DB's
-// const database = getDatabase(app)
-// const firestore = getFirestore(app)
-// const bucket = getStorage().bucket(bucketName)
-// export { firestore, database, bucket, getAuth, getDownloadURL, FieldValue }
-
-// ----------------------- NEW IMPLEMENTATION
-export default class FBService {
+//* ----------------------- FBSERVICE -----------------------
+export class FBService {
   app = initializeApp({
     credential: cert(FIREBASE_SERVICE_ACCOUNT as ServiceAccount),
     databaseURL: FB_DB_URL,
