@@ -22946,9 +22946,8 @@ import { getStorage, getDownloadURL } from "firebase-admin/storage";
 
 // src/models/GCSBucketName.ts
 var GCSBucketName = /* @__PURE__ */ ((GCSBucketName2) => {
-  GCSBucketName2["STOCKLIFT_TEST_BUCKET"] = "stocklift_test_bucket";
-  GCSBucketName2["SL_PUBLIC_BUCKET"] = "sl_public_bucket";
-  GCSBucketName2["SL_PROD_PUBLIC_BUCKET"] = "sl_prod_public_bucket";
+  GCSBucketName2["PUBLIC_BUCKET"] = "public_bucket";
+  GCSBucketName2["PRIVATE_BUCKET"] = "private_bucket";
   return GCSBucketName2;
 })(GCSBucketName || {});
 var GCSBucketName_default = GCSBucketName;
@@ -22975,7 +22974,7 @@ var FIREBASE_SERVICE_ACCOUNT = {
 var fb_auth_default = FIREBASE_SERVICE_ACCOUNT;
 
 // src/services/fb.service.ts
-var BUCKET_NAME = NODE_ENV === "dev" ? GCSBucketName_default.SL_PUBLIC_BUCKET : GCSBucketName_default.SL_PROD_PUBLIC_BUCKET;
+var BUCKET_NAME = NODE_ENV === "dev" ? GCSBucketName_default.PUBLIC_BUCKET : GCSBucketName_default.PRIVATE_BUCKET;
 var FBService = class _FBService {
   constructor() {
     this.app = initializeApp({

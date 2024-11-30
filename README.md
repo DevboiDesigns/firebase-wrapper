@@ -11,7 +11,7 @@
 Install the package using npm:
 
 ```sh
-npm install @stocklift/stocklift-firebase
+npm install @devboidesigns/firebase-wrapper
 ```
 
 # Usage
@@ -27,7 +27,7 @@ import {
   FBKeys,
   FBSubKeys,
   ERRKeys,
-} from "@stocklift/stocklift-firebase"
+} from "@devboidesigns/firebase-wrapper"
 ```
 
 **Initializing the Firebase Service**
@@ -67,7 +67,7 @@ const gscService = new GSCService()
 To upload a file to a Google Cloud Storage bucket:
 
 ```ts
-const bucket = gscService.storage.bucket(GCSBucketName.SL_PUBLIC_BUCKET)
+const bucket = gscService.storage.bucket(GCSBucketName.PUBLIC_BUCKET)
 await bucket.upload("path/to/local/file", { destination: "path/in/bucket" })
 ```
 

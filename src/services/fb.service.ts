@@ -10,8 +10,8 @@ import FIREBASE_SERVICE_ACCOUNT from "../config/fb.auth"
 
 const BUCKET_NAME =
   NODE_ENV === "dev"
-    ? GCSBucketName.SL_PUBLIC_BUCKET
-    : GCSBucketName.SL_PROD_PUBLIC_BUCKET
+    ? GCSBucketName.PUBLIC_BUCKET
+    : GCSBucketName.PRIVATE_BUCKET
 
 //* ----------------------- FBSERVICE -----------------------
 export class FBService {
