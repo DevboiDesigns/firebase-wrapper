@@ -19,6 +19,7 @@ jobs:
           registry-url: "https://npm.pkg.github.com"
           scope: "@DevboiDesigns"
       - run: npm ci
+      - run: npm install npm -g
       # - run: npm test
       - run: npm publish
         env:
