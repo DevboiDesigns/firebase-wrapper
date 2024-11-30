@@ -22937,7 +22937,7 @@ var require_fxp = __commonJS({
   }
 });
 
-// src/config/firebase.ts
+// src/services/fb.service.ts
 import { getAuth } from "firebase-admin/auth";
 import { initializeApp, cert } from "firebase-admin/app";
 import { getFirestore, FieldValue } from "firebase-admin/firestore";
@@ -22974,22 +22974,19 @@ var FIREBASE_SERVICE_ACCOUNT = {
 };
 var fb_auth_default = FIREBASE_SERVICE_ACCOUNT;
 
-// src/config/firebase.ts
+// src/services/fb.service.ts
 var bucketName = NODE_ENV === "dev" ? GCSBucketName_default.SL_PUBLIC_BUCKET : GCSBucketName_default.SL_PROD_PUBLIC_BUCKET;
-initializeApp({
-  credential: cert(fb_auth_default),
-  databaseURL: FB_DB_URL,
-  storageBucket: `${bucketName}.appspot.com`
-});
-var database = getDatabase();
-var firestore = getFirestore();
-var bucket = getStorage().bucket(bucketName);
 var FBService = class _FBService {
   constructor() {
+    this.app = initializeApp({
+      credential: cert(fb_auth_default),
+      databaseURL: FB_DB_URL,
+      storageBucket: `${bucketName}.appspot.com`
+    });
     // FIRESTORE
-    this.db = getFirestore();
+    this.db = getFirestore(this.app);
     // REALTIME DB
-    this.database = getDatabase();
+    this.database = getDatabase(this.app);
     // STORAGE
     this.bucket = getStorage().bucket(bucketName);
     // AUTH
@@ -25400,9 +25397,9 @@ var SignerExceptionMessages;
 var DEFAULT_SIGNING_VERSION = "v2";
 var SEVEN_DAYS = 7 * 24 * 60 * 60;
 var URLSigner = class {
-  constructor(auth, bucket2, file, storage = new Storage()) {
+  constructor(auth, bucket, file, storage = new Storage()) {
     this.auth = auth;
-    this.bucket = bucket2;
+    this.bucket = bucket;
     this.file = file;
     this.storage = storage;
   }
@@ -25582,13 +25579,13 @@ var URLSigner = class {
   getCanonicalQueryParams(query) {
     return objectEntries(query).map(([key, value]) => [encodeURI(key, true), encodeURI(value, true)]).sort((a, b) => a[0] < b[0] ? -1 : 1).map(([key, value]) => `${key}=${value}`).join("&");
   }
-  getResourcePath(cname, bucket2, file) {
+  getResourcePath(cname, bucket, file) {
     if (cname) {
       return "/" + (file || "");
     } else if (file) {
-      return `/${bucket2}/${file}`;
+      return `/${bucket}/${file}`;
     } else {
-      return `/${bucket2}`;
+      return `/${bucket}`;
     }
   }
   parseExpires(expires, current = /* @__PURE__ */ new Date()) {
@@ -26340,7 +26337,7 @@ var File = class _File extends ServiceObject {
    * const file = myBucket.file('my-file');
    * ```
    */
-  constructor(bucket2, name, options = {}) {
+  constructor(bucket, name, options = {}) {
     var _a2, _b;
     const requestQueryObject = {};
     let generation;
@@ -26355,7 +26352,7 @@ var File = class _File extends ServiceObject {
       }
     }
     Object.assign(requestQueryObject, options.preconditionOpts);
-    const userProject = options.userProject || bucket2.userProject;
+    const userProject = options.userProject || bucket.userProject;
     if (typeof userProject === "string") {
       requestQueryObject.userProject = userProject;
     }
@@ -26649,14 +26646,14 @@ var File = class _File extends ServiceObject {
       }
     };
     super({
-      parent: bucket2,
+      parent: bucket,
       baseUrl: "/o",
       id: encodeURIComponent(name),
       methods
     });
     _File_instances.add(this);
-    this.bucket = bucket2;
-    this.storage = bucket2.parent;
+    this.bucket = bucket;
+    this.storage = bucket.parent;
     if (options.generation !== null) {
       let generation2;
       if (typeof options.generation === "string") {
@@ -27741,11 +27738,11 @@ var File = class _File extends ServiceObject {
     const gsMatches = [...publicUrlOrGsUrl.matchAll(GS_UTIL_URL_REGEX)];
     const httpsMatches = [...publicUrlOrGsUrl.matchAll(HTTPS_PUBLIC_URL_REGEX)];
     if (gsMatches.length > 0) {
-      const bucket2 = new Bucket(storageInstance, gsMatches[0][2]);
-      return new _File(bucket2, gsMatches[0][3], options);
+      const bucket = new Bucket(storageInstance, gsMatches[0][2]);
+      return new _File(bucket, gsMatches[0][3], options);
     } else if (httpsMatches.length > 0) {
-      const bucket2 = new Bucket(storageInstance, httpsMatches[0][3]);
-      return new _File(bucket2, httpsMatches[0][4], options);
+      const bucket = new Bucket(storageInstance, httpsMatches[0][3]);
+      return new _File(bucket, httpsMatches[0][4], options);
     } else {
       throw new Error("URL string must be of format gs://bucket/file or https://storage.googleapis.com/bucket/file");
     }
@@ -29309,9 +29306,9 @@ var IAMExceptionMessages;
   IAMExceptionMessages2["PERMISSIONS_REQUIRED"] = "Permissions are required.";
 })(IAMExceptionMessages || (IAMExceptionMessages = {}));
 var Iam = class {
-  constructor(bucket2) {
-    this.request_ = bucket2.request.bind(bucket2);
-    this.resourceId_ = "buckets/" + bucket2.getId();
+  constructor(bucket) {
+    this.request_ = bucket.request.bind(bucket);
+    this.resourceId_ = "buckets/" + bucket.getId();
   }
   /**
    * @typedef {object} GetPolicyOptions Requested options for IAM#getPolicy().
@@ -29566,7 +29563,7 @@ var Iam = class {
 // node_modules/@google-cloud/storage/build/esm/src/notification.js
 var import_promisify5 = __toESM(require_src10(), 1);
 var Notification = class extends ServiceObject {
-  constructor(bucket2, id) {
+  constructor(bucket, id) {
     const requestQueryObject = {};
     const methods = {
       /**
@@ -29766,10 +29763,10 @@ var Notification = class extends ServiceObject {
       exists: true
     };
     super({
-      parent: bucket2,
+      parent: bucket,
       baseUrl: "/notificationConfigs",
       id: id.toString(),
-      createMethod: bucket2.createNotification.bind(bucket2),
+      createMethod: bucket.createNotification.bind(bucket),
       methods
     });
   }
@@ -33752,9 +33749,9 @@ var Storage = class _Storage extends Service {
         callback(err, null, resp);
         return;
       }
-      const bucket2 = this.bucket(name);
-      bucket2.metadata = resp;
-      callback(null, bucket2, resp);
+      const bucket = this.bucket(name);
+      bucket.metadata = resp;
+      callback(null, bucket, resp);
     });
   }
   /**
@@ -33954,9 +33951,9 @@ var Storage = class _Storage extends Service {
         return;
       }
       const itemsArray = resp.items ? resp.items : [];
-      const buckets = itemsArray.map((bucket2) => {
-        const bucketInstance = this.bucket(bucket2.id);
-        bucketInstance.metadata = bucket2;
+      const buckets = itemsArray.map((bucket) => {
+        const bucketInstance = this.bucket(bucket.id);
+        bucketInstance.metadata = bucket;
         return bucketInstance;
       });
       const nextQuery = resp.nextPageToken ? Object.assign({}, options, { pageToken: resp.nextPageToken }) : null;
@@ -34291,14 +34288,8 @@ export {
   FBKeys,
   FBService,
   FBSubKeys,
-  FieldValue,
   GCSBucketName_default as GCSBucketName,
-  GSCService,
-  bucket,
-  database,
-  firestore,
-  getAuth,
-  getDownloadURL
+  GSCService
 };
 /*! Bundled license information:
 

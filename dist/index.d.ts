@@ -1,19 +1,14 @@
 import * as _google_cloud_storage from '@google-cloud/storage';
 import { Storage } from '@google-cloud/storage';
 import * as firebase_admin_database from 'firebase-admin/database';
+import * as firebase_admin_app from 'firebase-admin/app';
 import { getAuth } from 'firebase-admin/auth';
-export { getAuth } from 'firebase-admin/auth';
 import { FieldValue } from 'firebase-admin/firestore';
-export { FieldValue } from 'firebase-admin/firestore';
 import { getDownloadURL } from 'firebase-admin/storage';
-export { getDownloadURL } from 'firebase-admin/storage';
 import * as _google_analytics_data_build_src_v1beta from '@google-analytics/data/build/src/v1beta';
 
-declare const database: firebase_admin_database.Database;
-declare const firestore: FirebaseFirestore.Firestore;
-declare const bucket: _google_cloud_storage.Bucket;
-
 declare class FBService {
+    app: firebase_admin_app.App;
     db: FirebaseFirestore.Firestore;
     database: firebase_admin_database.Database;
     bucket: _google_cloud_storage.Bucket;
@@ -164,4 +159,4 @@ declare const enum ERRKeys {
     webhook_err = "webhook_err"
 }
 
-export { ERRKeys, FBKeys, FBService, FBSubKeys, GCSBucketName, GSCService, bucket, database, firestore };
+export { ERRKeys, FBKeys, FBService, FBSubKeys, GCSBucketName, GSCService };
