@@ -8,7 +8,7 @@ import GCSBucketName from "../models/GCSBucketName"
 import { FB_DB_URL, NODE_ENV } from "../config/env.keys"
 import FIREBASE_SERVICE_ACCOUNT from "../config/fb.auth"
 
-const bucketName =
+const BUCKET_NAME =
   NODE_ENV === "dev"
     ? GCSBucketName.SL_PUBLIC_BUCKET
     : GCSBucketName.SL_PROD_PUBLIC_BUCKET
@@ -18,14 +18,14 @@ export class FBService {
   app = initializeApp({
     credential: cert(FIREBASE_SERVICE_ACCOUNT as ServiceAccount),
     databaseURL: FB_DB_URL,
-    storageBucket: `${bucketName}.appspot.com`,
+    storageBucket: `${BUCKET_NAME}.appspot.com`,
   })
   // FIRESTORE
   db = getFirestore(this.app)
   // REALTIME DB
   database = getDatabase(this.app)
   // STORAGE
-  bucket = getStorage().bucket(bucketName)
+  bucket = getStorage().bucket(BUCKET_NAME)
   // AUTH
   getAuth = getAuth
   // Download URL
