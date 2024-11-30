@@ -22982,20 +22982,20 @@ var FIREBASE_SERVICE_ACCOUNT = {
 var fb_auth_default = FIREBASE_SERVICE_ACCOUNT;
 
 // src/services/fb.service.ts
-var bucketName = NODE_ENV === "dev" ? GCSBucketName_default.SL_PUBLIC_BUCKET : GCSBucketName_default.SL_PROD_PUBLIC_BUCKET;
+var BUCKET_NAME = NODE_ENV === "dev" ? GCSBucketName_default.SL_PUBLIC_BUCKET : GCSBucketName_default.SL_PROD_PUBLIC_BUCKET;
 var FBService = class _FBService {
   constructor() {
     this.app = (0, import_app.initializeApp)({
       credential: (0, import_app.cert)(fb_auth_default),
       databaseURL: FB_DB_URL,
-      storageBucket: `${bucketName}.appspot.com`
+      storageBucket: `${BUCKET_NAME}.appspot.com`
     });
     // FIRESTORE
     this.db = (0, import_firestore.getFirestore)(this.app);
     // REALTIME DB
     this.database = (0, import_database.getDatabase)(this.app);
     // STORAGE
-    this.bucket = (0, import_storage.getStorage)().bucket(bucketName);
+    this.bucket = (0, import_storage.getStorage)().bucket(BUCKET_NAME);
     // AUTH
     this.getAuth = import_auth.getAuth;
     // Download URL
@@ -29172,8 +29172,8 @@ var File = class _File extends ServiceObject {
     var _a2;
     (_a2 = options.metadata) !== null && _a2 !== void 0 ? _a2 : options.metadata = {};
     const apiEndpoint = this.storage.apiEndpoint;
-    const bucketName2 = this.bucket.name;
-    const uri = `${apiEndpoint}/upload/storage/v1/b/${bucketName2}/o`;
+    const bucketName = this.bucket.name;
+    const uri = `${apiEndpoint}/upload/storage/v1/b/${bucketName}/o`;
     const reqOpts = {
       qs: {
         name: this.name
