@@ -1,6 +1,6 @@
 {
   "name": "@devboidesigns/firebase-wrapper",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Firebase Node API Wrapper",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
