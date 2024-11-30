@@ -1,3 +1,2 @@
-# NPM Template
+# Firebase Node API Wrapper
 
-Template project for publishing packages to Github NPM registry
