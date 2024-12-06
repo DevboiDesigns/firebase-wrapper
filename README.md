@@ -102,3 +102,10 @@ npm run build
 ```
 
 This documentation provides an overview of how to set up, install, and use the package, including examples of common operations.
+
+## Star on GitHub 🤩
+
+If you like this tool please take a moment to
+[star this project on GitHub](https://github.com/DevboiDesigns/firebase-wrapper#start-of-content).
+
+[![GitHub stars](https://img.shields.io/github/stars/devboidesigns/firebase-wrapper?style=social)](https://github.com/DevboiDesigns/firebase-wrapper#start-of-content)
