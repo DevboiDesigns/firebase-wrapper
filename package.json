@@ -1,6 +1,6 @@
 {
   "name": "@devboidesigns/firebase-wrapper",
-  "version": "0.0.6",
+  "version": "1.0.0",
   "description": "Firebase Node API Wrapper",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
@@ -16,7 +16,7 @@
     "url": "https://github.com/DevboiDesigns/firebase-wrapper.git"
   },
   "scripts": {
-    "build": "tsup",
+    "build": "tsup && npm test",
     "test": "jest"
   },
   "author": "Christopher Hicks",

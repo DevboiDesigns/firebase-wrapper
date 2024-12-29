@@ -22955,9 +22955,9 @@ var GCSBucketName_default = GCSBucketName;
 // src/config/env.keys.ts
 var import_dotenv = __toESM(require_main());
 (0, import_dotenv.config)({
-  path: process.env.NODE_ENV ? `.env.${process.env.NODE_ENV}` : ".env.dev"
+  path: process.env.NODE_ENV ? `.env.${process.env.NODE_ENV}` : ".env.production"
 });
-var NODE_ENV = process.env.NODE_ENV || "dev";
+var NODE_ENV = process.env.NODE_ENV || "production";
 var FB_PROJECT_ID = process.env.FB_PROJECT_ID;
 var _a;
 var FB_PRIVATE_KEY = (_a = process.env.FB_PRIVATE_KEY) == null ? void 0 : _a.replace(/\\n/g, "\n");
@@ -22975,17 +22975,17 @@ var fb_auth_default = FIREBASE_SERVICE_ACCOUNT;
 
 // src/services/fb.service.ts
 var BUCKET_NAME = NODE_ENV === "dev" ? GCSBucketName_default.PUBLIC_BUCKET : GCSBucketName_default.PRIVATE_BUCKET;
-var FBService = class _FBService {
+var app = initializeApp({
+  credential: cert(fb_auth_default),
+  databaseURL: FB_DB_URL,
+  storageBucket: `${BUCKET_NAME}.appspot.com`
+});
+var FirebaseService = class _FirebaseService {
   constructor() {
-    this.app = initializeApp({
-      credential: cert(fb_auth_default),
-      databaseURL: FB_DB_URL,
-      storageBucket: `${BUCKET_NAME}.appspot.com`
-    });
     // FIRESTORE
-    this.db = getFirestore(this.app);
+    this.db = getFirestore(app);
     // REALTIME DB
-    this.database = getDatabase(this.app);
+    this.database = getDatabase(app);
     // STORAGE
     this.bucket = getStorage().bucket(BUCKET_NAME);
     // AUTH
@@ -23044,10 +23044,10 @@ var FBService = class _FBService {
       }
       return yield this.db.collection(collection).doc(doc).collection(subCollection).doc(subDoc).set(data);
     });
-    if (_FBService.instance) {
-      return _FBService.instance;
+    if (_FirebaseService.instance) {
+      return _FirebaseService.instance;
     }
-    _FBService.instance = this;
+    _FirebaseService.instance = this;
   }
 };
 
@@ -34285,8 +34285,8 @@ var ERRKeys = /* @__PURE__ */ ((ERRKeys2) => {
 export {
   ERRKeys,
   FBKeys,
-  FBService,
   FBSubKeys,
+  FirebaseService,
   GCSBucketName_default as GCSBucketName,
   GSCService
 };

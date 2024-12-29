@@ -3,7 +3,7 @@ import { initializeApp, cert, ServiceAccount } from "firebase-admin/app"
 import { getFirestore, FieldValue } from "firebase-admin/firestore"
 import { getDatabase } from "firebase-admin/database"
 import { getStorage, getDownloadURL } from "firebase-admin/storage"
-
+// ---------------- MODELS, KEYS, CERT ----------------
 import GCSBucketName from "../models/GCSBucketName"
 import { FB_DB_URL, NODE_ENV } from "../config/env.keys"
 import FIREBASE_SERVICE_ACCOUNT from "../config/fb.auth"
@@ -13,17 +13,27 @@ const BUCKET_NAME =
     ? GCSBucketName.PUBLIC_BUCKET
     : GCSBucketName.PRIVATE_BUCKET
 
-//* ----------------------- FBSERVICE -----------------------
-export class FBService {
+const // Initialize Firebase
   app = initializeApp({
     credential: cert(FIREBASE_SERVICE_ACCOUNT as ServiceAccount),
     databaseURL: FB_DB_URL,
     storageBucket: `${BUCKET_NAME}.appspot.com`,
   })
+
+//* ----------------------- FBSERVICE -----------------------
+export class FirebaseService {
+  private static instance: FirebaseService
+  constructor() {
+    if (FirebaseService.instance) {
+      return FirebaseService.instance
+    }
+    FirebaseService.instance = this
+  }
+
   // FIRESTORE
-  db = getFirestore(this.app)
+  db = getFirestore(app)
   // REALTIME DB
-  database = getDatabase(this.app)
+  database = getDatabase(app)
   // STORAGE
   bucket = getStorage().bucket(BUCKET_NAME)
   // AUTH
@@ -33,14 +43,6 @@ export class FBService {
 
   // Properties
   FieldValue = FieldValue
-
-  private static instance: FBService
-  constructor() {
-    if (FBService.instance) {
-      return FBService.instance
-    }
-    FBService.instance = this
-  }
 
   //* SINGLE COLLECTION
   // GET

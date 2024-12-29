@@ -1,22 +1,20 @@
 import * as _google_cloud_storage from '@google-cloud/storage';
 import { Storage } from '@google-cloud/storage';
 import * as firebase_admin_database from 'firebase-admin/database';
-import * as firebase_admin_app from 'firebase-admin/app';
 import { getAuth } from 'firebase-admin/auth';
 import { FieldValue } from 'firebase-admin/firestore';
 import { getDownloadURL } from 'firebase-admin/storage';
 import * as _google_analytics_data_build_src_v1beta from '@google-analytics/data/build/src/v1beta';
 
-declare class FBService {
-    app: firebase_admin_app.App;
+declare class FirebaseService {
+    private static instance;
+    constructor();
     db: FirebaseFirestore.Firestore;
     database: firebase_admin_database.Database;
     bucket: _google_cloud_storage.Bucket;
     getAuth: typeof getAuth;
     getDownloadURL: typeof getDownloadURL;
     FieldValue: typeof FieldValue;
-    private static instance;
-    constructor();
     getCollection: (collection: string, doc?: string) => FirebaseFirestore.CollectionReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>;
     getData: <T>(collection: string, doc?: string) => Promise<T>;
     setData: (data: any, collection: string, docId?: string) => Promise<FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData> | FirebaseFirestore.WriteResult>;
@@ -158,4 +156,4 @@ declare const enum ERRKeys {
     webhook_err = "webhook_err"
 }
 
-export { ERRKeys, FBKeys, FBService, FBSubKeys, GCSBucketName, GSCService };
+export { ERRKeys, FBKeys, FBSubKeys, FirebaseService, GCSBucketName, GSCService };

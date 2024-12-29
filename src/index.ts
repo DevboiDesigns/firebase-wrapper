@@ -1,26 +1,14 @@
-// import {
-//   firestore,
-//   database,
-//   bucket,
-//   getAuth,
-//   getDownloadURL,
-//   FieldValue,
-// } from "./config/firebase"
-import { FBService } from "./services/fb.service"
+// IMPORTS
+import { FirebaseService } from "./services/fb.service"
 import GCSBucketName from "./models/GCSBucketName"
 import GSCService from "./config/google"
 import { FBKeys, FBSubKeys, ERRKeys } from "./config/fb.collection.keys"
 
+// EXPORTS
 export {
-  FBService,
+  FirebaseService,
   GCSBucketName,
   GSCService,
-  // firestore,
-  // database,
-  // bucket,
-  // getAuth,
-  // getDownloadURL,
-  // FieldValue,
   FBKeys,
   FBSubKeys,
   ERRKeys,
